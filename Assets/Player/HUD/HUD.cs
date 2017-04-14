@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class HUD : MonoBehaviour {
 
+    //TODO Convert to Canvas from GUI coding
+
     public GUISkin resourceSkin, ordersSkin;
 
     const int ORDERS_BAR_WIDTH = 150, RESOURCE_BAR_HEIGHT = 40;
