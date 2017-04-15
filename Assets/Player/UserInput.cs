@@ -82,25 +82,34 @@ public class UserInput : MonoBehaviour {
         float xPos = Input.mousePosition.x;
         float yPos = Input.mousePosition.y;
         Vector3 movement = new Vector3 (0, 0, 0);
+        bool mouseScroll = false;
 
         // Horizontal camera movement
         if (xPos >= 0 && xPos < ResourceManager.ScrollWidth)
         {
             movement.x -= ResourceManager.ScrollSpeed;
+            player.hud.SetCursorState (CursorState.PanLeft);
+            mouseScroll = true;
         }
         else if (xPos <= Screen.width && xPos > Screen.width -ResourceManager.ScrollWidth)
         {
             movement.x += ResourceManager.ScrollSpeed;
+            player.hud.SetCursorState (CursorState.PanRight);
+            mouseScroll = true;
         }
 
         // Vertical camera movement
         if (yPos >= 0 && yPos < ResourceManager.ScrollWidth)
         {
             movement.z -= ResourceManager.ScrollSpeed;
+            player.hud.SetCursorState (CursorState.PanDown);
+            mouseScroll = true;
         }
         else if (yPos <= Screen.width && yPos > Screen.height - ResourceManager.ScrollWidth)
         {
             movement.z += ResourceManager.ScrollSpeed;
+            player.hud.SetCursorState (CursorState.PanUp);
+            mouseScroll = true;
         }
 
         movement = Camera.main.transform.TransformDirection (movement);
@@ -129,6 +138,10 @@ public class UserInput : MonoBehaviour {
         if (destination != origin)
         {
             Camera.main.transform.position = Vector3.MoveTowards (origin, destination, Time.deltaTime * ResourceManager.ScrollSpeed);
+        }
+        if (!mouseScroll)
+        {
+            player.hud.SetCursorState (CursorState.Select);
         }
     }
 
