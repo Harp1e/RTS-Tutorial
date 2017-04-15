@@ -26,6 +26,7 @@ public class UserInput : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown (0)) LeftMouseClick ();
         else if (Input.GetMouseButtonDown (1)) RightMouseClick ();
+        MouseHover ();
     }
 
     private void RightMouseClick ()
@@ -48,7 +49,7 @@ public class UserInput : MonoBehaviour {
                 if (player.SelectedObject) player.SelectedObject.MouseClick (hitObject, hitPoint, player);
                 else if (hitObject.name != "Ground")
                 {
-                    WorldObject worldObject = hitObject.transform.root.GetComponent<WorldObject> ();
+                    WorldObject worldObject = hitObject.transform.parent.GetComponent<WorldObject> ();
                     if (worldObject)
                     {
                         player.SelectedObject = worldObject;
@@ -159,5 +160,27 @@ public class UserInput : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast (ray, out hit)) return hit.point;
         return ResourceManager.InvalidPosition;
+    }
+
+    void MouseHover ()
+    {
+        if (player.hud.MouseInBounds())
+        {
+            GameObject hoverObject = FindHitObject ();
+            if (hoverObject)
+            {
+                if (player.SelectedObject) player.SelectedObject.SetHoverState (hoverObject);
+                else if (hoverObject.name != "Ground")
+                {
+                    Player owner = hoverObject.transform.root.GetComponent<Player> ();
+                    if (owner)
+                    {
+                        Unit unit = hoverObject.transform.parent.GetComponent<Unit> ();
+                        Building building = hoverObject.transform.parent.GetComponent<Building> ();
+                        if (owner.username == player.username && (unit || building)) player.hud.SetCursorState (CursorState.Select);
+                    }
+                }
+            }
+        }
     }
 }
