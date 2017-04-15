@@ -13,6 +13,8 @@ public class HUD : MonoBehaviour {
     public Texture2D selectCursor, leftCursor, rightCursor, upCursor, downCursor;
     public Texture2D buttonHover, buttonClick;
     public Texture2D buildFrame, buildMask;
+    public Texture2D smallButtonHover, smallButtonClick;
+    public Texture2D rallyPointCursor;
     public Texture2D[] moveCursors, attackCursors, harvestCursors;
     public Texture2D[] resources;
 
@@ -29,6 +31,7 @@ public class HUD : MonoBehaviour {
 
     Player player;
     CursorState activeCursorState;
+    CursorState previousCursorState;
     WorldObject lastSelection;
 
     float sliderValue;
@@ -88,6 +91,7 @@ public class HUD : MonoBehaviour {
 
     public void SetCursorState (CursorState newState)
     {
+        if (activeCursorState != newState) previousCursorState = activeCursorState;
         activeCursorState = newState;
         switch (newState)
         {
@@ -118,6 +122,9 @@ public class HUD : MonoBehaviour {
                 currentFrame = (int)Time.time % harvestCursors.Length;
                 activeCursor = harvestCursors[currentFrame];
                 break;
+            case CursorState.RallyPoint:
+                activeCursor = rallyPointCursor;
+                break;
             default:
                 break;
         }
@@ -127,6 +134,16 @@ public class HUD : MonoBehaviour {
     {
         this.resourceValues = resourceValues;
         this.resourceLimits = resourceLimits;
+    }
+
+    public CursorState GetPreviousCursorState ()
+    {
+        return previousCursorState;
+    }
+
+    public CursorState GetCursorState ()
+    {
+        return activeCursorState;
     }
 
     private void DrawResourceBar ()
@@ -165,6 +182,7 @@ public class HUD : MonoBehaviour {
                 if (selectedBuilding)
                 {
                     DrawBuildQueue (selectedBuilding.getBuildQueueValues (), selectedBuilding.getBuildPercentage ());
+                    DrawStandardBuildingOptions (selectedBuilding);
                 }
             }
         }
@@ -175,6 +193,35 @@ public class HUD : MonoBehaviour {
             GUI.Label (new Rect (leftPos, topPos, ORDERS_BAR_WIDTH, SELECTION_NAME_HEIGHT), selectionName);
         }
         GUI.EndGroup ();
+    }
+
+    void DrawStandardBuildingOptions (Building building)
+    {
+        GUIStyle buttons = new GUIStyle ();
+        buttons.hover.background = smallButtonHover;
+        buttons.active.background = smallButtonClick;
+        GUI.skin.button = buttons;
+        int leftPos = BUILD_IMAGE_WIDTH + SCROLL_BAR_WIDTH + BUTTON_SPACING;
+        int topPos = buildAreaHeight - BUILD_IMAGE_HEIGHT / 2;
+        int width = BUILD_IMAGE_WIDTH / 2;
+        int height = BUILD_IMAGE_HEIGHT / 2;
+        if (GUI.Button (new Rect(leftPos, topPos,width,height),building.sellImage))
+        {
+            building.Sell ();
+        }
+        if (building.hasSpawnPoint())
+        {
+            leftPos += width + BUTTON_SPACING;
+            if (GUI.Button(new Rect (leftPos, topPos, width, height), building.rallyPointImage))
+            {
+                if (activeCursorState != CursorState.RallyPoint && previousCursorState != CursorState.RallyPoint) SetCursorState (CursorState.RallyPoint);
+                else
+                {
+                    SetCursorState (CursorState.PanRight);
+                    SetCursorState (CursorState.Select);
+                }
+            }
+        }
     }
 
     void DrawBuildQueue (string[] buildQueue, float buildPercentage)
@@ -250,11 +297,12 @@ public class HUD : MonoBehaviour {
 
         if (activeCursorState == CursorState.PanRight) leftPos = Screen.width - activeCursor.width;
         else if (activeCursorState == CursorState.PanDown) topPos = Screen.height - activeCursor.height;
-        else if (activeCursorState == CursorState.Move || activeCursorState == CursorState.Select || activeCursorState == CursorState.Harvest) 
+        else if (activeCursorState == CursorState.Move || activeCursorState == CursorState.Select || activeCursorState == CursorState.Harvest)
         {
             topPos -= activeCursor.height / 2;
             leftPos -= activeCursor.width / 2;
         }
+        else if (activeCursorState == CursorState.RallyPoint) topPos -= activeCursor.height;
         return new Rect (leftPos, topPos, activeCursor.width, activeCursor.height);
     }
 
