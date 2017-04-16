@@ -14,6 +14,12 @@ namespace RTS {
         public static float MaxCameraHeight { get { return 40; } }
         public static int BuildSpeed { get { return 2; } }
 
+        static Texture2D healthyTexture, damagedTexture, criticalTexture;
+        public static Texture2D HealthyTexture { get { return healthyTexture; } }
+        public static Texture2D DamagedTexture { get { return damagedTexture; } }
+        public static Texture2D CriticalTexture { get { return criticalTexture; } }
+
+
         static Vector3 invalidPosition = new Vector3 (-99999, -99999, -99999);
         public static Vector3 InvalidPosition { get { return invalidPosition; } }
 
@@ -24,10 +30,14 @@ namespace RTS {
         public static Bounds InvalidBounds {get {return invalidBounds; } }
 
         static GameObjectList gameObjectList;
+        static Dictionary<ResourceType, Texture2D> resourceHealthBarTextures;
 
-        public static void StoreSelectBoxItems (GUISkin skin)
+        public static void StoreSelectBoxItems (GUISkin skin, Texture2D healthy, Texture2D damaged, Texture2D critical)
         {
             selectBoxSkin = skin;
+            healthyTexture = healthy;
+            damagedTexture = damaged;
+            criticalTexture = critical;
         }
 
         public static void SetGameObjectList (GameObjectList objectList)
@@ -58,6 +68,17 @@ namespace RTS {
         public static Texture2D GetBuildImage (string name)
         {
             return gameObjectList.GetBuildImage (name);
+        }
+
+        public static Texture2D GetResourceHealthBar (ResourceType resourceType)
+        {
+            if (resourceHealthBarTextures != null && resourceHealthBarTextures.ContainsKey (resourceType)) return resourceHealthBarTextures[resourceType];
+            return null; 
+        }
+
+        public static void SetResourceHealthBarTextures (Dictionary<ResourceType, Texture2D> images)
+        {
+            resourceHealthBarTextures = images;
         }
     }
 }

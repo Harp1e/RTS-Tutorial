@@ -5,12 +5,13 @@ using RTS;
 
 public class Unit : WorldObject
 {
-    protected bool moving, rotating;
-
     public float moveSpeed, rotateSpeed;
+
+    protected bool moving, rotating;
 
     Vector3 destination;
     Quaternion targetRotation;
+    GameObject destinationTarget;
 
     protected override void Awake ()
     {
@@ -52,21 +53,29 @@ public class Unit : WorldObject
     public void StartMove (Vector3 destination)
     {
         this.destination = destination;
+        destinationTarget = null;
         targetRotation = Quaternion.LookRotation (destination - transform.position);
         rotating = true;
         moving = false;
     }
 
+    public void StartMove (Vector3 destination, GameObject destinationTarget)
+    {
+        StartMove (destination);
+        this.destinationTarget = destinationTarget;
+    }
+
     void TurnToTarget ()
     {
         transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, rotateSpeed);
+        CalculateBounds ();
         Quaternion inverseTargetRotation = new Quaternion (-targetRotation.x, -targetRotation.y, -targetRotation.z, -targetRotation.w);
         if (transform.rotation == targetRotation || transform.rotation == inverseTargetRotation)
         {
             rotating = false;
             moving = true;
         }
-        CalculateBounds ();
+        if (destinationTarget) CalculateTargetDestination ();
     }
 
     void MakeMove ()
@@ -74,5 +83,34 @@ public class Unit : WorldObject
         transform.position = Vector3.MoveTowards (transform.position, destination, Time.deltaTime * moveSpeed);
         if (transform.position == destination) moving = false;
         CalculateBounds ();
+    }
+
+    void CalculateTargetDestination ()
+    {
+        Vector3 originalExtents = selectionBounds.extents;
+        Vector3 normalExtents = originalExtents;
+        normalExtents.Normalize ();
+        float numberOfExtents = originalExtents.x / normalExtents.x;
+        int unitShift = Mathf.FloorToInt (numberOfExtents);
+
+        WorldObject worldObject = destinationTarget.GetComponent<WorldObject> ();
+        if (worldObject) originalExtents = worldObject.GetSelectionBounds ().extents;
+        else originalExtents = new Vector3 (0f, 0f, 0f);
+        normalExtents = originalExtents;
+        normalExtents.Normalize ();
+        numberOfExtents = originalExtents.x / normalExtents.x;
+        int targetShift = Mathf.FloorToInt (numberOfExtents);
+
+        int shiftAmount = targetShift + unitShift;
+
+        Vector3 origin = transform.position;
+        Vector3 direction = new Vector3 (destination.x - origin.x, 0f, destination.z - origin.z);
+        direction.Normalize ();
+
+        for (int i = 0; i < shiftAmount; i++)
+        {
+            destination -= direction;
+        }
+        destination.y = destinationTarget.transform.position.y;
     }
 }

@@ -10,12 +10,9 @@ public class Building : WorldObject {
     public float maxBuildProgress;
 
     protected Queue<string> buildQueue;
-    protected Vector3 rallyPoint;
-
-    Vector3 spawnPoint;
+    protected Vector3 spawnPoint, rallyPoint;
 
     float currentBuildProgress = 0f;
-
 
     protected override void Awake ()
     {

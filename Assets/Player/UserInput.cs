@@ -9,7 +9,7 @@ public class UserInput : MonoBehaviour {
     Player player;
 
 	void Start () {
-        player = GetComponent<Player> ();
+        player = transform.root.GetComponent<Player> ();
 	}
 	
 
@@ -69,7 +69,7 @@ public class UserInput : MonoBehaviour {
         if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && Input.GetMouseButton(1))
         {
             destination.x -= Input.GetAxis ("Mouse Y") * ResourceManager.RotateAmount;
-            destination.y -= Input.GetAxis ("Mouse X") * ResourceManager.RotateAmount;
+            destination.y += Input.GetAxis ("Mouse X") * ResourceManager.RotateAmount;
         }
 
         if (destination != origin)
@@ -106,7 +106,7 @@ public class UserInput : MonoBehaviour {
             player.hud.SetCursorState (CursorState.PanDown);
             mouseScroll = true;
         }
-        else if (yPos <= Screen.width && yPos > Screen.height - ResourceManager.ScrollWidth)
+        else if (yPos <= Screen.height && yPos > Screen.height - ResourceManager.ScrollWidth)
         {
             movement.z += ResourceManager.ScrollSpeed;
             player.hud.SetCursorState (CursorState.PanUp);

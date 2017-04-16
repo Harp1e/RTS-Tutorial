@@ -15,8 +15,10 @@ public class HUD : MonoBehaviour {
     public Texture2D buildFrame, buildMask;
     public Texture2D smallButtonHover, smallButtonClick;
     public Texture2D rallyPointCursor;
+    public Texture2D healthy, damaged, critical; 
     public Texture2D[] moveCursors, attackCursors, harvestCursors;
     public Texture2D[] resources;
+    public Texture2D[] resourceHealthBars;
 
     Dictionary<ResourceType, int> resourceValues, resourceLimits;
     Dictionary<ResourceType, Texture2D> resourceImages;
@@ -40,8 +42,6 @@ public class HUD : MonoBehaviour {
 
 	void Start () {
         player = transform.root.GetComponent<Player> ();
-        ResourceManager.StoreSelectBoxItems (selectBoxSkin);
-        SetCursorState (CursorState.Select);
         resourceValues = new Dictionary<ResourceType, int> ();
         resourceLimits = new Dictionary<ResourceType, int> ();
         resourceImages = new Dictionary<ResourceType, Texture2D> ();
@@ -64,11 +64,26 @@ public class HUD : MonoBehaviour {
             }
         }
         buildAreaHeight = Screen.height - RESOURCE_BAR_HEIGHT - SELECTION_NAME_HEIGHT - 2 * BUTTON_SPACING;
-	}
+        ResourceManager.StoreSelectBoxItems (selectBoxSkin, healthy, damaged, critical);
+        SetCursorState (CursorState.Select);
+        Dictionary<ResourceType, Texture2D> resourceHealthBarTextures = new Dictionary<ResourceType, Texture2D> ();
+        for (int i = 0; i < resourceHealthBars.Length; i++)
+        {
+            switch (resourceHealthBars[i].name)
+            {
+                case "ore":
+                    resourceHealthBarTextures.Add (ResourceType.Ore, resourceHealthBars[i]);
+                    break;
+                default:
+                    break;
+            }
+        }
+        ResourceManager.SetResourceHealthBarTextures (resourceHealthBarTextures);
+    }
 
     void OnGUI ()
     {
-        if (player && player.human)
+        if (player.human)
         {
             DrawOrdersBar ();
             DrawResourceBar ();
@@ -205,14 +220,14 @@ public class HUD : MonoBehaviour {
         int topPos = buildAreaHeight - BUILD_IMAGE_HEIGHT / 2;
         int width = BUILD_IMAGE_WIDTH / 2;
         int height = BUILD_IMAGE_HEIGHT / 2;
-        if (GUI.Button (new Rect(leftPos, topPos,width,height),building.sellImage))
+        if (GUI.Button (new Rect (leftPos, topPos, width, height), building.sellImage))
         {
             building.Sell ();
         }
         if (building.hasSpawnPoint())
         {
             leftPos += width + BUTTON_SPACING;
-            if (GUI.Button(new Rect (leftPos, topPos, width, height), building.rallyPointImage))
+            if (GUI.Button (new Rect (leftPos, topPos, width, height), building.rallyPointImage))
             {
                 if (activeCursorState != CursorState.RallyPoint && previousCursorState != CursorState.RallyPoint) SetCursorState (CursorState.RallyPoint);
                 else
@@ -238,7 +253,7 @@ public class HUD : MonoBehaviour {
             if (i==0)
             {
                 topPos += height * buildPercentage;
-                height += (1 - buildPercentage);
+                height *= (1 - buildPercentage);
             }
             GUI.DrawTexture (new Rect (2 * BUILD_IMAGE_PADDING, topPos, width, height), buildMask);
         }
