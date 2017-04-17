@@ -30,7 +30,6 @@ public class OreDeposit : Resource
             }
             for (int i = numBlocksToShow; i < sortedBlocks.Length; i++)
             {
-//                sortedBlocks[i].renderer.enabled = false;     // Deprecated 
                 sortedBlocks[i].GetComponent<Renderer> ().enabled = false;
             }
             CalculateBounds ();

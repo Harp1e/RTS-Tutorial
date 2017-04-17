@@ -54,7 +54,7 @@ public class Harvester : Unit
                         if (!resourceDeposit.isEmpty())
                         {
                             harvesting = true;
-                            StartMove (resourceStore.transform.position, resourceStore.gameObject);
+                            StartMove (resourceDeposit.transform.position, resourceDeposit.gameObject);
                         }
                     }
                 }
@@ -106,6 +106,12 @@ public class Harvester : Unit
         float width = 5f;
         Texture2D resourceBar = ResourceManager.GetResourceHealthBar (harvestType);
         if (resourceBar) GUI.DrawTexture (new Rect (leftPos, topPos, width, height), resourceBar);
+    }
+
+    public override void Init (Building creator)
+    {
+        base.Init (creator);
+        resourceStore = creator;
     }
 
     void StartHarvest (Resource resource)

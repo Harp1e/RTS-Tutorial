@@ -39,7 +39,13 @@ public class Unit : WorldObject
         base.MouseClick (hitObject, hitPoint, controller);
         if (player && player.human && currentlySelected)
         {
-            if (hitObject.name == "Ground" && hitPoint != ResourceManager.InvalidPosition)
+            bool clickedOnEmptyResource = false;
+            if (hitObject.transform.parent)
+            {
+                Resource resource = hitObject.transform.parent.GetComponent<Resource> ();
+                if (resource && resource.isEmpty ()) clickedOnEmptyResource = true;
+            }
+            if ((hitObject.name == "Ground" || clickedOnEmptyResource) && hitPoint != ResourceManager.InvalidPosition)
             {
                 float x = hitPoint.x;
                 float y = hitPoint.y + player.SelectedObject.transform.position.y;
@@ -48,6 +54,30 @@ public class Unit : WorldObject
                 StartMove (destination);
             }
         }
+    }
+
+    public override void SetHoverState (GameObject hoverObject)
+    {
+        base.SetHoverState (hoverObject);
+        if (player && player.human && currentlySelected)
+        {
+            bool moveHover = false;
+            if (hoverObject.name == "Ground")
+            {
+                moveHover = true;
+            }
+            else
+            {
+                Resource resource = hoverObject.transform.parent.GetComponent<Resource> ();
+                if (resource && resource.isEmpty ()) moveHover = true;
+            }
+            if (moveHover) player.hud.SetCursorState (CursorState.Move);
+        }
+    }
+
+    public virtual void Init (Building creator)
+    {
+        // specific intialisation for a unit can be specified here
     }
 
     public void StartMove (Vector3 destination)
@@ -112,5 +142,6 @@ public class Unit : WorldObject
             destination -= direction;
         }
         destination.y = destinationTarget.transform.position.y;
+        destinationTarget = null;
     }
 }

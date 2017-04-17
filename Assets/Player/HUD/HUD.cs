@@ -63,9 +63,6 @@ public class HUD : MonoBehaviour {
                     break;
             }
         }
-        buildAreaHeight = Screen.height - RESOURCE_BAR_HEIGHT - SELECTION_NAME_HEIGHT - 2 * BUTTON_SPACING;
-        ResourceManager.StoreSelectBoxItems (selectBoxSkin, healthy, damaged, critical);
-        SetCursorState (CursorState.Select);
         Dictionary<ResourceType, Texture2D> resourceHealthBarTextures = new Dictionary<ResourceType, Texture2D> ();
         for (int i = 0; i < resourceHealthBars.Length; i++)
         {
@@ -79,6 +76,9 @@ public class HUD : MonoBehaviour {
             }
         }
         ResourceManager.SetResourceHealthBarTextures (resourceHealthBarTextures);
+        buildAreaHeight = Screen.height - RESOURCE_BAR_HEIGHT - SELECTION_NAME_HEIGHT - 2 * BUTTON_SPACING;
+        ResourceManager.StoreSelectBoxItems (selectBoxSkin, healthy, damaged, critical);
+        SetCursorState (CursorState.Select);
     }
 
     void OnGUI ()
