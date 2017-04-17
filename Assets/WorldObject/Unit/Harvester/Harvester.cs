@@ -108,10 +108,10 @@ public class Harvester : Unit
         if (resourceBar) GUI.DrawTexture (new Rect (leftPos, topPos, width, height), resourceBar);
     }
 
-    public override void Init (Building creator)
+    public override void SetBuilding (Building store)
     {
-        base.Init (creator);
-        resourceStore = creator;
+        base.SetBuilding (store);
+        resourceStore = store;
     }
 
     void StartHarvest (Resource resource)

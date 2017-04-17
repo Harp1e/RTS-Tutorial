@@ -13,6 +13,7 @@ public class Building : WorldObject {
     protected Vector3 spawnPoint, rallyPoint;
 
     float currentBuildProgress = 0f;
+    bool needsBuilding = false;
 
     protected override void Awake ()
     {
@@ -37,7 +38,8 @@ public class Building : WorldObject {
     protected override void OnGUI ()
     {
         base.OnGUI ();
-    }
+        if (needsBuilding) DrawBuildProgress ();
+     }
 
     public override void SetSelection (bool selected, Rect playingArea)
     {
@@ -148,5 +150,39 @@ public class Building : WorldObject {
     public bool hasSpawnPoint ()
     {
         return spawnPoint != ResourceManager.InvalidPosition && rallyPoint != ResourceManager.InvalidPosition;
+    }
+
+    public void StartConstruction ()
+    {
+        CalculateBounds ();
+        needsBuilding = true;
+        hitPoints = 0;
+    }
+
+    void DrawBuildProgress ()
+    {
+        GUI.skin = ResourceManager.SelectBoxSkin;
+        Rect selectBox = WorkManager.CalculateSelectionBox (selectionBounds, playingArea);
+        GUI.BeginGroup (playingArea);
+        CalculateCurrentHealth (0.5f, 0.99f);
+        DrawHealthBar (selectBox, "Building ...");
+        GUI.EndGroup ();
+
+    }
+
+    public bool UnderConstruction ()
+    {
+        return needsBuilding;
+    }
+
+    public void Construct (int amount)
+    {
+        hitPoints += amount;
+        if (hitPoints >= maxHitPoints)
+        {
+            hitPoints = maxHitPoints;
+            needsBuilding = false;
+            RestoreMaterials ();
+        }
     }
 }
