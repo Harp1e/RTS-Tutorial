@@ -8,7 +8,7 @@ public class HUD : MonoBehaviour {
 
     //TODO Convert to Canvas from GUI coding?
 
-    public GUISkin resourceSkin, ordersSkin, selectBoxSkin, mouseCursorSkin;
+    public GUISkin resourceSkin, ordersSkin, selectBoxSkin, mouseCursorSkin, playerDetailsSkin;
     public Texture2D activeCursor;
     public Texture2D selectCursor, leftCursor, rightCursor, upCursor, downCursor;
     public Texture2D buttonHover, buttonClick;
@@ -85,6 +85,7 @@ public class HUD : MonoBehaviour {
     {
         if (player.human)
         {
+            DrawPlayerDetails ();
             DrawOrdersBar ();
             DrawResourceBar ();
             DrawMouseCursor ();
@@ -159,6 +160,26 @@ public class HUD : MonoBehaviour {
     public CursorState GetCursorState ()
     {
         return activeCursorState;
+    }
+
+    void DrawPlayerDetails ()
+    {
+        GUI.skin = playerDetailsSkin;
+        GUI.BeginGroup (new Rect (0, 0, Screen.width, Screen.height));
+        float height = ResourceManager.TextHeight;
+        float leftPos = ResourceManager.Padding;
+        float topPos = Screen.height - height - ResourceManager.Padding;
+        Texture2D avatar = PlayerManager.GetPlayerAvatar ();
+        if (avatar)
+        {
+            GUI.DrawTexture (new Rect (leftPos, topPos, height, height), avatar);
+            leftPos += height + ResourceManager.Padding;
+        }
+        float minWidth = 0, maxWidth = 0;
+        string playerName = PlayerManager.GetPlayerName ();
+        playerDetailsSkin.GetStyle ("label").CalcMinMaxWidth (new GUIContent (playerName), out minWidth, out maxWidth);
+        GUI.Label (new Rect (leftPos, topPos, maxWidth, height), playerName);
+        GUI.EndGroup ();
     }
 
     private void DrawResourceBar ()
