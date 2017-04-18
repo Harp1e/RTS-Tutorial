@@ -5,7 +5,7 @@ using RTS;
 
 public class SelectPlayerMenu : MonoBehaviour
 {
-    public GUISkin mySkin;
+    public GUISkin mySkin, selectionSkin;
     public Texture2D[] avatars;
 
     string playerName = "NewPlayer";
@@ -13,8 +13,10 @@ public class SelectPlayerMenu : MonoBehaviour
 
     void Start ()
     {
+        PlayerManager.Load ();
         if (avatars.Length > 0) avatarIndex = 0;
         PlayerManager.SetAvatarTextures (avatars);
+        SelectionList.LoadEntries (PlayerManager.GetPlayerNames ());
     }
 
     private void OnGUI ()
@@ -39,6 +41,7 @@ public class SelectPlayerMenu : MonoBehaviour
         float textTop = menuHeight - 2 * ResourceManager.Padding - ResourceManager.ButtonHeight - ResourceManager.TextHeight;
         float textWidth = ResourceManager.MenuWidth - 2 * ResourceManager.Padding;
         playerName = GUI.TextField (new Rect (ResourceManager.Padding, textTop, textWidth, ResourceManager.TextHeight), playerName, 14);
+        SelectionList.SetCurrentEntry (playerName);
 
         if (avatarIndex >= 0)
         {
@@ -63,9 +66,29 @@ public class SelectPlayerMenu : MonoBehaviour
         }
 
         GUI.EndGroup ();
+
+        string prevSelection = SelectionList.GetCurrentEntry ();
+
+        float selectionLeft = groupRect.x + ResourceManager.Padding;
+        float selectionTop = groupRect.y + ResourceManager.Padding;
+        float selectionWidth = groupRect.width - 2 * ResourceManager.Padding;
+        float selectionHeight = groupRect.height - GetMenuItemsHeight () - ResourceManager.Padding;
+        SelectionList.Draw (selectionLeft, selectionTop, selectionWidth, selectionHeight, selectionSkin);
+
+        string newSelection = SelectionList.GetCurrentEntry ();
+        if (prevSelection != newSelection)
+        {
+            playerName = newSelection;
+            avatarIndex = PlayerManager.GetAvatar (playerName);
+        }
     }
 
     float GetMenuHeight ()
+    {
+        return 250 + GetMenuItemsHeight ();
+    }
+
+    float GetMenuItemsHeight ()
     {
         float avatarHeight = 0;
         if (avatars.Length > 0) avatarHeight = avatars[0].height + 2 * ResourceManager.Padding;

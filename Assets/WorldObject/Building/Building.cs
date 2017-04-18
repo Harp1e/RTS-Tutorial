@@ -19,11 +19,17 @@ public class Building : WorldObject {
     {
         base.Awake ();
         buildQueue = new Queue<string> ();
+        SetSpawnPoint ();
+    }
+
+    private void SetSpawnPoint ()
+    {
         float spawnX = selectionBounds.center.x + transform.forward.x * selectionBounds.extents.x + transform.forward.x * 10;
         float spawnZ = selectionBounds.center.z + transform.forward.z + selectionBounds.extents.z + transform.forward.z * 10;
         spawnPoint = new Vector3 (spawnX, 0f, spawnZ);
         rallyPoint = spawnPoint;
     }
+
     protected override void Start ()
     {
         base.Start ();
@@ -184,6 +190,7 @@ public class Building : WorldObject {
             needsBuilding = false;
             RestoreMaterials ();
             SetTeamColor ();
+            SetSpawnPoint ();
         }
     }
 }
