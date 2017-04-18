@@ -12,7 +12,17 @@ namespace RTS {
         public static float RotateAmount { get { return 10; } }
         public static float MinCameraHeight { get { return 10; } }
         public static float MaxCameraHeight { get { return 40; } }
+        public static float PauseMenuHeight { get { return headerHeight + 2 * buttonHeight + 4 * padding; } }
+        public static float MenuWidth { get { return headerWidth + 2 * padding; } }
+        public static float ButtonHeight { get { return buttonHeight;} }
+        public static float ButtonWidth { get { return (MenuWidth - 3 * padding) / 2; } }
+        public static float HeaderHeight { get { return headerHeight; } }
+        public static float HeaderWidth { get { return headerWidth; } }
+        public static float TextHeight { get { return textHeight; } }
+        public static float Padding { get { return padding; } }
+
         public static int BuildSpeed { get { return 2; } }
+        public static bool MenuOpen { get; set; }
 
         static Texture2D healthyTexture, damagedTexture, criticalTexture;
         public static Texture2D HealthyTexture { get { return healthyTexture; } }
@@ -31,6 +41,10 @@ namespace RTS {
 
         static GameObjectList gameObjectList;
         static Dictionary<ResourceType, Texture2D> resourceHealthBarTextures;
+
+        static float buttonHeight = 40;
+        static float headerHeight = 32, headerWidth = 256;
+        static float textHeight = 25, padding = 10;
 
         public static void StoreSelectBoxItems (GUISkin skin, Texture2D healthy, Texture2D damaged, Texture2D critical)
         {

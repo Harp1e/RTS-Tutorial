@@ -16,20 +16,30 @@ public class UserInput : MonoBehaviour {
 	void Update () {
         if (player.human)
         {
+            if (Input.GetKeyDown (KeyCode.Escape)) OpenPauseMenu ();
             MoveCamera ();
             RotateCamera ();
             MouseActivity ();
         }
 	}
 
-    private void MouseActivity ()
+    void OpenPauseMenu ()
+    {
+        Time.timeScale = 0f;
+        GetComponentInChildren<PauseMenu> ().enabled = true;
+        GetComponent<UserInput> ().enabled = false;
+        Cursor.visible = true;
+        ResourceManager.MenuOpen = true;
+    }
+
+    void MouseActivity ()
     {
         if (Input.GetMouseButtonDown (0)) LeftMouseClick ();
         else if (Input.GetMouseButtonDown (1)) RightMouseClick ();
         MouseHover ();
     }
 
-    private void RightMouseClick ()
+    void RightMouseClick ()
     {
         if (player.hud.MouseInBounds() && !Input.GetKey(KeyCode.LeftAlt) && player.SelectedObject)
         {
