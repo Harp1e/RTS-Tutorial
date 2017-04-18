@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
     public HUD hud;
     public WorldObject SelectedObject { get; set; }
     public Material notAllowedMaterial, allowedMaterial;
+    public Color teamColor;
 
     public string username;
     public bool human;

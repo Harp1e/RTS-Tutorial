@@ -8,17 +8,22 @@ public class WorldObject : MonoBehaviour {
     public string objectName;
     public Texture2D buildImage;
     public int cost, sellValue, hitPoints, maxHitPoints;
+    public float weaponRange = 10f, weaponRechargeTime = 1f, weaponAimSpeed = 1f;
 
     protected Player player;
     protected Bounds selectionBounds;
     protected Rect playingArea = new Rect (0f, 0f, 0f, 0f);
     protected GUIStyle healthStyle = new GUIStyle ();
+    protected WorldObject target = null;
 
     protected string[] actions = { };
     protected float healthPercentage = 1f;
-    protected bool currentlySelected = false;
+    protected bool currentlySelected = false, attacking = false;
+    protected bool movingIntoPosition = false, aiming = false;
 
     List<Material> oldMaterials = new List<Material> ();
+
+    float currentWeaponChargeTime;
 
     protected virtual void Awake ()
     {
@@ -28,16 +33,24 @@ public class WorldObject : MonoBehaviour {
 	protected virtual void Start ()
     {
         SetPlayer ();
+        if (player) SetTeamColor ();
     }
 
     protected virtual void Update ()
     {
-		
+        currentWeaponChargeTime += Time.deltaTime;
+        if (attacking && !movingIntoPosition && !aiming) PerformAttack ();
 	}
 
     protected virtual void OnGUI ()
     {
         if (currentlySelected) DrawSelection ();
+    }
+
+    protected void SetTeamColor ()
+    {
+        TeamColor[] teamColors = GetComponentsInChildren<TeamColor> ();
+        foreach (TeamColor teamColor in teamColors) teamColor.GetComponent<Renderer>().material.color = player.teamColor;
     }
 
     public void SetPlayer ()
@@ -70,7 +83,17 @@ public class WorldObject : MonoBehaviour {
             {
                 Resource resource = hitObject.transform.parent.GetComponent<Resource> ();
                 if (resource && resource.isEmpty ()) return;
-                ChangeSelection (worldObject, controller);
+                Player owner = hitObject.transform.root.GetComponent<Player> ();
+                if (owner)          // object controlled by a player
+                {
+                    if (player && player.human)
+                    {
+                        if (player.username != owner.username && CanAttack ()) BeginAttack (worldObject);
+                        else ChangeSelection (worldObject, controller);
+                    }
+                    else ChangeSelection (worldObject, controller);
+                } 
+                else ChangeSelection (worldObject, controller);
             }
         }
     }
@@ -79,8 +102,27 @@ public class WorldObject : MonoBehaviour {
     {
         if (player && player.human && currentlySelected)
         {
-            if (hoverObject.name == "Ground") player.hud.SetCursorState (CursorState.Move);
+            if (hoverObject.name != "Ground")
+            {
+                Player owner = hoverObject.transform.root.GetComponent<Player> ();
+                Unit unit = hoverObject.transform.parent.GetComponent<Unit> ();
+                Building building = hoverObject.transform.parent.GetComponent<Building> ();
+                if (owner)
+                {
+                    if (owner.username == player.username) player.hud.SetCursorState (CursorState.Select);
+                    else if (CanAttack ()) player.hud.SetCursorState (CursorState.Attack);
+                    else player.hud.SetCursorState (CursorState.Select);
+                }
+                else if (unit || building && CanAttack ()) player.hud.SetCursorState (CursorState.Attack);
+                else player.hud.SetCursorState (CursorState.Select);
+            }
         }
+    }
+
+    public virtual bool CanAttack ()
+    {
+        // default behaviour overridden by children
+        return false;
     }
 
     public void CalculateBounds ()
@@ -181,5 +223,93 @@ public class WorldObject : MonoBehaviour {
         healthStyle.fontStyle = FontStyle.Bold;
         GUI.Label (new Rect (selectBox.x, selectBox.y - 7, selectBox.width * healthPercentage, 5), label, healthStyle);
 
+    }
+
+    protected virtual void BeginAttack (WorldObject target)
+    {
+        this.target = target;
+        if (TargetInRange ())
+        {
+            attacking = true;
+            PerformAttack ();
+        }
+        else AdjustPosition ();
+    }
+
+    bool TargetInRange ()
+    {
+        Vector3 targetLocation = target.transform.position;
+        Vector3 direction = targetLocation - transform.position;
+        if (direction.sqrMagnitude < weaponRange * weaponRange)
+        {
+            return true;
+        }
+        return false;
+    } 
+
+    void AdjustPosition ()
+    {
+        Unit self = this as Unit;
+        if (self)
+        {
+            movingIntoPosition = true;
+            Vector3 attackPosition = FindNearestAttackPosition ();
+            self.StartMove (attackPosition);
+            attacking = true;
+        }
+        else attacking = false;
+    }
+
+    Vector3 FindNearestAttackPosition ()
+    {
+        Vector3 targetLocation = target.transform.position;
+        Vector3 direction = targetLocation - transform.position;
+        float targetDistance = direction.magnitude;
+        float distanceToTravel = targetDistance - (0.9f * weaponRange);
+        return Vector3.Lerp (transform.position, targetLocation, distanceToTravel / targetDistance);
+    }
+
+    void PerformAttack ()
+    {
+        if (!target)
+        {
+            attacking = false;
+            return;
+        }
+        if (!TargetInRange ()) AdjustPosition ();
+        else if (!TargetInFrontOfWeapon()) AimAtTarget ();
+        else if (ReadyToFire ()) UseWeapon ();
+    }
+
+    bool TargetInFrontOfWeapon ()
+    {
+        Vector3 targetLocation = target.transform.position;
+        Vector3 direction = targetLocation - transform.position;
+        if (direction.normalized == transform.forward.normalized) return true;
+        else return false;
+    }
+
+    protected virtual void AimAtTarget()
+    {
+        aiming = true;
+        // to be specified by specific object
+    }
+
+    bool ReadyToFire ()
+    {
+        if (currentWeaponChargeTime >= weaponRechargeTime) return true;
+        return false;
+    } 
+
+    protected virtual void UseWeapon ()
+    {
+        currentWeaponChargeTime = 0f;
+        // behaviour specified by object
+    }
+
+    public void TakeDamage (int damage)
+    {
+        hitPoints -= damage;
+        if (hitPoints <= 0) Destroy (gameObject);
     }
 }
