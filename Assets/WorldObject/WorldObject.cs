@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using RTS;
+using Newtonsoft.Json;
 
 public class WorldObject : MonoBehaviour {
+
+    public int ObjectId { get; set; }
 
     public string objectName;
     public Texture2D buildImage;
@@ -123,6 +126,25 @@ public class WorldObject : MonoBehaviour {
     {
         // default behaviour overridden by children
         return false;
+    }
+
+    public virtual void SaveDetails (JsonWriter writer)
+    {
+        SaveManager.WriteString (writer, "Type", name);
+        SaveManager.WriteString (writer, "Name", objectName);
+        SaveManager.WriteInt (writer, "Id", ObjectId);
+        SaveManager.WriteVector (writer, "Position", transform.position);
+        SaveManager.WriteQuaternion (writer, "Rotation", transform.rotation);
+        SaveManager.WriteVector (writer, "Scale", transform.localScale);
+        SaveManager.WriteInt (writer, "HitPoints", hitPoints);
+        SaveManager.WriteBoolean (writer, "Attacking", attacking);
+        SaveManager.WriteBoolean (writer, "MovingIntoPosition", movingIntoPosition);
+        SaveManager.WriteBoolean (writer, "Aiming", aiming);
+        if(attacking)
+        {
+            SaveManager.WriteFloat (writer, "CurrentWeaponChargeTime", currentWeaponChargeTime);
+        }
+        if (target != null) SaveManager.WriteInt (writer, "TargetId", target.ObjectId);
     }
 
     public void CalculateBounds ()

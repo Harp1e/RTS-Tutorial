@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
+using RTS;
 
 public class Worker : Unit
 {
@@ -80,4 +82,11 @@ public class Worker : Unit
         if (player) player.CreateBuilding (buildingName, buildPoint, this, playingArea);
     }
 
+    public override void SaveDetails (JsonWriter writer)
+    {
+        base.SaveDetails (writer);
+        SaveManager.WriteBoolean (writer, "Building", building);
+        SaveManager.WriteFloat (writer, "AmountBuilt", amountBuilt);
+        if (currentProject) SaveManager.WriteInt (writer, "CurrentProjectId", currentProject.ObjectId);
+    }
 }

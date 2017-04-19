@@ -1,0 +1,443 @@
+{
+  "Sun": {
+    "Position": {
+      "x": 0.0,
+      "y": 100.0,
+      "z": 0.0
+    },
+    "Rotation": {
+      "x": 0.408217877,
+      "y": -0.234569684,
+      "z": 0.109381631,
+      "w": 0.8754261
+    },
+    "Scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  "Ground": {
+    "Position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "Rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "w": 1.0
+    },
+    "Scale": {
+      "x": 100.0,
+      "y": 1.0,
+      "z": 100.0
+    }
+  },
+  "Camera": {
+    "Position": {
+      "x": 34.7323456,
+      "y": 14.70623,
+      "z": -29.090641
+    },
+    "Rotation": {
+      "x": -0.0958255455,
+      "y": 0.408765137,
+      "z": -0.0432056971,
+      "w": -0.906565964
+    },
+    "Scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  "Resources": [
+    {
+      "Type": "OreDeposit ",
+      "Name": "Ore Deposit",
+      "Id": 1,
+      "Position": {
+        "x": 1.89,
+        "y": 0.0,
+        "z": -43.5
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 1.0
+      },
+      "Scale": {
+        "x": 5.0,
+        "y": 5.0,
+        "z": 5.0
+      },
+      "HitPoints": 100,
+      "Attacking": false,
+      "MovingIntoPosition": false,
+      "Aiming": false,
+      "Amount Left": 1000.0
+    },
+    {
+      "Type": "OreDeposit",
+      "Name": "Ore Deposit",
+      "Id": 4,
+      "Position": {
+        "x": 1.89,
+        "y": 0.0,
+        "z": 25.37
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 1.0
+      },
+      "Scale": {
+        "x": 5.0,
+        "y": 5.0,
+        "z": 5.0
+      },
+      "HitPoints": 100,
+      "Attacking": false,
+      "MovingIntoPosition": false,
+      "Aiming": false,
+      "Amount Left": 1000.0
+    }
+  ],
+  "Players": [
+    {
+      "Username": "Player1",
+      "Human": true,
+      "TeamColor": {
+        "r": 0.392156869,
+        "g": 0.784313738,
+        "b": 0.980392158,
+        "a": 1.0
+      },
+      "Resources": [
+        {
+          "Money": 1000
+        },
+        {
+          "Power": 500
+        }
+      ],
+      "Buildings": [],
+      "Units": [
+        {
+          "Type": "Worker",
+          "Name": "Worker",
+          "Id": 5,
+          "Position": {
+            "x": 29.07,
+            "y": 0.0,
+            "z": -8.6
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "HitPoints": 100,
+          "Attacking": false,
+          "MovingIntoPosition": false,
+          "Aiming": false,
+          "Moving": false,
+          "Rotating": false,
+          "Destination": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0
+          },
+          "Building": false,
+          "AmountBuilt": 0.0
+        }
+      ]
+    },
+    {
+      "Username": "Player2",
+      "Human": false,
+      "TeamColor": {
+        "r": 0.921568632,
+        "g": 0.0784313753,
+        "b": 0.0784313753,
+        "a": 1.0
+      },
+      "Resources": [
+        {
+          "Money": 1000
+        },
+        {
+          "Power": 500
+        }
+      ],
+      "Buildings": [
+        {
+          "Type": "Refinery",
+          "Name": "Refinery",
+          "Id": 8,
+          "Position": {
+            "x": -67.5,
+            "y": 0.0,
+            "z": 34.7
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "HitPoints": 50,
+          "Attacking": false,
+          "MovingIntoPosition": false,
+          "Aiming": false,
+          "NeedsBuilding": false,
+          "SpawnPoint": {
+            "x": -67.5,
+            "y": 0.0,
+            "z": 49.7
+          },
+          "RallyPoint": {
+            "x": -67.5,
+            "y": 0.0,
+            "z": 49.7
+          },
+          "BuildProgress": 0.0,
+          "BuildQueue": []
+        },
+        {
+          "Type": "WarFactory",
+          "Name": "War Factory",
+          "Id": 0,
+          "Position": {
+            "x": -81.7,
+            "y": 0.0,
+            "z": -29.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "HitPoints": 100,
+          "Attacking": false,
+          "MovingIntoPosition": false,
+          "Aiming": false,
+          "NeedsBuilding": false,
+          "SpawnPoint": {
+            "x": -81.7,
+            "y": 0.0,
+            "z": -13.0
+          },
+          "RallyPoint": {
+            "x": -81.7,
+            "y": 0.0,
+            "z": -13.0
+          },
+          "BuildProgress": 0.0,
+          "BuildQueue": []
+        }
+      ],
+      "Units": [
+        {
+          "Type": "Harvester",
+          "Name": "Harvester",
+          "Id": 7,
+          "Position": {
+            "x": -48.7999954,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "HitPoints": 100,
+          "Attacking": false,
+          "MovingIntoPosition": false,
+          "Aiming": false,
+          "Moving": false,
+          "Rotating": false,
+          "Destination": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0
+          },
+          "Harvesting": false,
+          "Emptying": false,
+          "CurrentLoad": 0.0,
+          "CurrentDeposit": 0.0,
+          "HarvestType": "Unknown",
+          "ResourceStoreId": 0
+        },
+        {
+          "Type": "Tank",
+          "Name": "Tank",
+          "Id": 6,
+          "Position": {
+            "x": -56.2999954,
+            "y": 0.0,
+            "z": 34.5
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "HitPoints": 100,
+          "Attacking": false,
+          "MovingIntoPosition": false,
+          "Aiming": false,
+          "Moving": false,
+          "Rotating": false,
+          "Destination": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0
+          },
+          "AimRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0
+          }
+        },
+        {
+          "Type": "Tank ",
+          "Name": "Tank",
+          "Id": 3,
+          "Position": {
+            "x": -59.6,
+            "y": 0.0,
+            "z": -28.3
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "HitPoints": 100,
+          "Attacking": false,
+          "MovingIntoPosition": false,
+          "Aiming": false,
+          "Moving": false,
+          "Rotating": false,
+          "Destination": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0
+          },
+          "AimRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0
+          }
+        },
+        {
+          "Type": "Worker",
+          "Name": "Worker",
+          "Id": 2,
+          "Position": {
+            "x": -68.0,
+            "y": 0.0,
+            "z": -22.1
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "HitPoints": 100,
+          "Attacking": false,
+          "MovingIntoPosition": false,
+          "Aiming": false,
+          "Moving": false,
+          "Rotating": false,
+          "Destination": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0
+          },
+          "Building": false,
+          "AmountBuilt": 0.0
+        }
+      ]
+    }
+  ]
+}

@@ -23,6 +23,7 @@ namespace RTS {
 
         public static int BuildSpeed { get { return 2; } }
         public static bool MenuOpen { get; set; }
+        public static string LevelName { get; set; } 
 
         static Texture2D healthyTexture, damagedTexture, criticalTexture;
         public static Texture2D HealthyTexture { get { return healthyTexture; } }
@@ -93,6 +94,13 @@ namespace RTS {
         public static void SetResourceHealthBarTextures (Dictionary<ResourceType, Texture2D> images)
         {
             resourceHealthBarTextures = images;
+        }
+
+        public static int GetNewObjectId ()
+        {
+            LevelLoader loader = (LevelLoader)GameObject.FindObjectOfType (typeof (LevelLoader));
+            if (loader) return loader.GetNewObjectId ();
+            return -1;
         }
     }
 }

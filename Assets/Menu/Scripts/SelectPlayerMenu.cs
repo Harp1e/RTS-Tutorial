@@ -21,6 +21,12 @@ public class SelectPlayerMenu : MonoBehaviour
 
     private void OnGUI ()
     {
+        if (SelectionList.MouseDoubleClick())
+        {
+            playerName = SelectionList.GetCurrentEntry ();
+            SelectPlayer ();
+        }
+
         GUI.skin = mySkin;
 
         float menuHeight = GetMenuHeight ();
