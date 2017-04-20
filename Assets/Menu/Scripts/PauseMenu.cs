@@ -21,7 +21,7 @@ public class PauseMenu : Menu
 
     protected override void SetButtons ()
     {
-        buttons = new string[] { "Resume", "Save Game", "Exit Game" };
+        buttons = new string[] { "Resume", "Save Game", "Load Game", "Exit Game" };
     }
 
     protected override void HandleButton (string text)
@@ -34,12 +34,20 @@ public class PauseMenu : Menu
             case "Save Game":
                 SaveGame ();
                 break;
+            case "Load Game":
+                LoadGame ();
+                break;
             case "Exit Game":
                 ReturnToMainMenu ();
                 break;
             default:
                 break;
         }
+    }
+
+    protected override void HideCurrentMenu ()
+    {
+        GetComponent<PauseMenu> ().enabled = false;
     }
 
     void Resume ()
@@ -64,6 +72,7 @@ public class PauseMenu : Menu
 
     void ReturnToMainMenu ()
     {
+        ResourceManager.LevelName = "";
         SceneManager.LoadScene ("MainMenu");
         Cursor.visible = true;
     }

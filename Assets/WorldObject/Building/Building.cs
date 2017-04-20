@@ -75,7 +75,7 @@ public class Building : WorldObject {
         base.SetHoverState (hoverObject);
         if (player && player.human && currentlySelected)
         {
-            if (hoverObject.name == "Ground")
+            if (WorkManager.ObjectIsGround(hoverObject))
             {
                 if (player.hud.GetPreviousCursorState() == CursorState.RallyPoint)
                 {
@@ -90,7 +90,7 @@ public class Building : WorldObject {
         base.MouseClick (hitObject, hitPoint, controller);
         if (player && player.human && currentlySelected)
         {
-            if (hitObject.name == "Ground")
+            if (WorkManager.ObjectIsGround (hitObject))
             {
                 if ((player.hud.GetCursorState() == CursorState.RallyPoint || player.hud.GetPreviousCursorState() == CursorState.RallyPoint) && hitPoint != ResourceManager.InvalidPosition)
                 {
@@ -203,6 +203,21 @@ public class Building : WorldObject {
         SaveManager.WriteVector (writer, "RallyPoint", rallyPoint);
         SaveManager.WriteFloat (writer, "BuildProgress", currentBuildProgress);
         SaveManager.WriteStringArray (writer, "BuildQueue", buildQueue.ToArray());
+        if (needsBuilding) SaveManager.WriteRect (writer, "PlayingArea", playingArea);
+    }
 
+    protected override void HandleLoadedProperty (JsonTextReader reader, string propertyName, object readValue)
+    {
+        base.HandleLoadedProperty (reader, propertyName, readValue);
+        switch (propertyName)
+        {
+            case "NeedsBuilding": needsBuilding = (bool)readValue; break;
+            case "SpawnPoint": spawnPoint = LoadManager.LoadVector (reader); break;
+            case "RallyPoint": rallyPoint = LoadManager.LoadVector (reader); break;
+            case "BuildProgress": currentBuildProgress = (float)(double)readValue; break;
+            case "BuildQueue": buildQueue = new Queue<string> (LoadManager.LoadStringArray (reader)); break;
+            case "PlayingArea": playingArea = LoadManager.LoadRect (reader); break;
+            default: break;
+        }
     }
 }

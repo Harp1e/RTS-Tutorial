@@ -75,8 +75,24 @@ public class Menu : MonoBehaviour {
         return ResourceManager.HeaderHeight + buttonHeight + paddingHeight + messageHeight;           
     }
 
+    protected virtual void HideCurrentMenu ()
+    {
+        // child class needs to set this to hide itself
+    }
+
     protected void ExitGame ()
     {
         Application.Quit();
+    }
+
+    protected void LoadGame ()
+    {
+        HideCurrentMenu ();
+        LoadMenu loadMenu = GetComponent<LoadMenu> ();
+        if (loadMenu)
+        {
+            loadMenu.enabled = true;
+            loadMenu.Activate ();
+        }
     }
 }

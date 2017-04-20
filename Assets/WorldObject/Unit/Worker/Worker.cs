@@ -11,11 +11,17 @@ public class Worker : Unit
     Building currentProject;
     bool building = false;
     float amountBuilt = 0f;
+    int loadedProjectId = -1;
 
     protected override void Start ()
     {
         base.Start ();
         actions = new string[] { "Refinery", "WarFactory" };
+        if (player && loadedSavedValues && loadedProjectId >= 0)
+        {
+            WorldObject obj = player.GetObjectForId (loadedProjectId);
+            if (obj.GetType ().IsSubclassOf (typeof (Building))) currentProject = (Building)obj;
+        }
     }
 
     protected override void Update ()
@@ -40,7 +46,7 @@ public class Worker : Unit
     public override void MouseClick (GameObject hitObject, Vector3 hitPoint, Player controller)
     {
         bool doBase = true;
-        if (player && player.human && currentlySelected && hitObject && hitObject.name != "Ground")
+        if (player && player.human && currentlySelected && hitObject && !WorkManager.ObjectIsGround (hitObject))
         {
             Building building = hitObject.transform.parent.GetComponent<Building> ();
             if (building)
@@ -88,5 +94,17 @@ public class Worker : Unit
         SaveManager.WriteBoolean (writer, "Building", building);
         SaveManager.WriteFloat (writer, "AmountBuilt", amountBuilt);
         if (currentProject) SaveManager.WriteInt (writer, "CurrentProjectId", currentProject.ObjectId);
+    }
+
+    protected override void HandleLoadedProperty (JsonTextReader reader, string propertyName, object readValue)
+    {
+        base.HandleLoadedProperty (reader, propertyName, readValue);
+        switch (propertyName)
+        {
+            case "Building": building = (bool)readValue; break;
+            case "AmountBuilt": amountBuilt = (float)(double)readValue; break;
+            case "CurrentProjectId": loadedProjectId = (int)(System.Int64)readValue; break;
+            default: break;
+        }
     }
 }

@@ -14,8 +14,9 @@ public class Resource : WorldObject
     protected override void Start ()
     {
         base.Start ();
-        amountLeft = capacity;
         resourceType = ResourceType.Unknown;
+        if (loadedSavedValues) return;
+        amountLeft = capacity;
     }
 
     protected override void CalculateCurrentHealth (float lowSplit, float highSplit)
@@ -47,5 +48,18 @@ public class Resource : WorldObject
     {
         base.SaveDetails (writer);
         SaveManager.WriteFloat (writer, "Amount Left", amountLeft);
+    }
+
+    protected override void HandleLoadedProperty (JsonTextReader reader, string propertyName, object readValue)
+    {
+        base.HandleLoadedProperty (reader, propertyName, readValue);
+        switch (propertyName)
+        {
+            case "AmountLeft":
+                amountLeft = (float)(double)readValue;
+                break;
+            default:
+                break;
+        }
     }
 }

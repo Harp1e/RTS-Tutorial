@@ -37,9 +37,9 @@
   },
   "Camera": {
     "Position": {
-      "x": 34.7323456,
+      "x": 34.8021126,
       "y": 14.70623,
-      "z": -29.090641
+      "z": -30.2575111
     },
     "Rotation": {
       "x": -0.0958255455,
@@ -55,8 +55,8 @@
   },
   "Resources": [
     {
-      "Type": "OreDeposit ",
-      "Name": "Ore Deposit",
+      "Type": "OreDeposit",
+      "Name": "OreDeposit",
       "Id": 1,
       "Position": {
         "x": 1.89,
@@ -82,7 +82,7 @@
     },
     {
       "Type": "OreDeposit",
-      "Name": "Ore Deposit",
+      "Name": "OreDeposit",
       "Id": 4,
       "Position": {
         "x": 1.89,
@@ -123,18 +123,23 @@
         },
         {
           "Power": 500
+        },
+        {
+          "Money_Limit": 2000
+        },
+        {
+          "Power_Limit": 500
         }
       ],
-      "Buildings": [],
-      "Units": [
+      "Buildings": [
         {
-          "Type": "Worker",
-          "Name": "Worker",
-          "Id": 5,
+          "Type": "Refinery",
+          "Name": "Refinery",
+          "Id": 11,
           "Position": {
-            "x": 29.07,
+            "x": 24.1551533,
             "y": 0.0,
-            "z": -8.6
+            "z": -29.30161
           },
           "Rotation": {
             "x": 0.0,
@@ -147,25 +152,72 @@
             "y": 1.0,
             "z": 1.0
           },
+          "HitPoints": 0,
+          "Attacking": false,
+          "MovingIntoPosition": false,
+          "Aiming": false,
+          "NeedsBuilding": true,
+          "SpawnPoint": {
+            "x": 29.07,
+            "y": 0.0,
+            "z": 16.4
+          },
+          "RallyPoint": {
+            "x": 29.07,
+            "y": 0.0,
+            "z": 16.4
+          },
+          "BuildProgress": 0.0,
+          "BuildQueue": [],
+          "PlayingArea": {
+            "x": 0.0,
+            "y": 40.0,
+            "width": 859.0,
+            "height": 389.0
+          }
+        }
+      ],
+      "Units": [
+        {
+          "Type": "Worker",
+          "Name": "Worker",
+          "Id": 5,
+          "Position": {
+            "x": 26.6474953,
+            "y": 0.0,
+            "z": -18.8037529
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": -0.993215859,
+            "z": 0.0,
+            "w": 0.116285376
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
           "HitPoints": 100,
           "Attacking": false,
           "MovingIntoPosition": false,
           "Aiming": false,
-          "Moving": false,
+          "Moving": true,
           "Rotating": false,
           "Destination": {
-            "x": 0.0,
+            "x": 25.5411129,
             "y": 0.0,
-            "z": 0.0
+            "z": -23.4638767
           },
           "TargetRotation": {
             "x": 0.0,
-            "y": 0.0,
+            "y": 0.993215859,
             "z": 0.0,
-            "w": 0.0
+            "w": -0.116285376
           },
-          "Building": false,
-          "AmountBuilt": 0.0
+          "Building": true,
+          "AmountBuilt": 0.0,
+          "CurrentProjectId": 11
         }
       ]
     },
@@ -184,6 +236,12 @@
         },
         {
           "Power": 500
+        },
+        {
+          "Money_Limit": 2000
+        },
+        {
+          "Power_Limit": 500
         }
       ],
       "Buildings": [
@@ -354,7 +412,7 @@
           }
         },
         {
-          "Type": "Tank ",
+          "Type": "Tank",
           "Name": "Tank",
           "Id": 3,
           "Position": {

@@ -19,7 +19,7 @@ public class MainMenu : Menu
 
     protected override void SetButtons ()
     {
-        buttons = new string[] { "New Game", "Change Player", "Quit Game" };
+        buttons = new string[] { "New Game", "Load Game", "Change Player", "Quit Game" };
     }
 
     protected override void HandleButton (string text)
@@ -28,6 +28,9 @@ public class MainMenu : Menu
         {
             case "New Game":
                 NewGame ();
+                break;
+            case "Load Game":
+                LoadGame ();
                 break;
             case "Change Player":
                 ChangePlayer ();
@@ -40,13 +43,18 @@ public class MainMenu : Menu
         }
     }
 
+    protected override void HideCurrentMenu () 
+    {
+        GetComponent<MainMenu> ().enabled = false;
+    }
+
     void NewGame ()
     {
         ResourceManager.MenuOpen = false;
         SceneManager.LoadScene ("Map");
         Time.timeScale = 1f;
     }
-     
+
     private void OnLevelFinishedLoading (Scene scene, LoadSceneMode mode)
     {
         Cursor.visible = true;
